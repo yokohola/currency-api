@@ -8,6 +8,10 @@ from functools import wraps
 def check_ip(func):
     @wraps(func)
     def checker(*args, **kwargs):
+        if request.access_route:
+            client_ip = request.access_route[0]
+        else:
+            client_ip = request.remote_addr
         if request.remote_addr not in IP_LIST:
             return abort(403)
 

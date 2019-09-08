@@ -1,3 +1,5 @@
+"""Unittests"""
+
 import unittest
 import json
 from unittest.mock import patch
@@ -6,7 +8,7 @@ import models
 import api
 import xmltodict
 import xml.etree.ElementTree as ET
-
+from models import XRate, ApiLog, ErrorLog
 
 def get_privat_response(*args, **kwargs):
     print("get_privat_response")
@@ -22,9 +24,17 @@ def get_privat_response(*args, **kwargs):
 
 
 class Test(unittest.TestCase):
-
     def setUp(self):
-        models.init_db()
+        XRate.drop_table()
+        XRate.create_table()
+        XRate.create(from_currency=840, to_currency=980, rate=1, module="privat_api")
+        XRate.create(from_currency=840, to_currency=643, rate=1, module="cbr_api")
+        XRate.create(from_currency=1000, to_currency=840, rate=1, module="privat_api")
+        XRate.create(from_currency=1000, to_currency=980, rate=1, module="cryptonator_api")
+        XRate.create(from_currency=1000, to_currency=643, rate=1, module="cryptonator_api")
+
+        for m in (ApiLog, ErrorLog):
+            m.create_table()
 
     # @unittest.skip("skip")
     def test_private_usd(self):

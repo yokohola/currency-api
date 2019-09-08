@@ -1,5 +1,7 @@
 import logging
 
+VAR_ENV = '' #use with variable environment
+
 DB_NAME = "currency_api.db"
 
 HTTP_TIMEOUT = 15
